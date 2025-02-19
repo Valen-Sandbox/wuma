@@ -1,4 +1,3 @@
-
 Loadout = {}
 
 local object = {}
@@ -134,65 +133,67 @@ function object:GiveWeapon(class)
 	if not self:HasWeapon(class) then 
 		if self:GetAncestor() then return self:GetAncestor():GiveWeapon(class) end
 	end
-	if not self:GetParent() then return end
+	
+	local parent = self:GetParent()
+	if not parent then return end
 	
 	local weapon = self:GetWeapon(class)
 	
 	if weapon:IsDisabled() then return end
 	if not weapon:DoesRespectRestriction() then
-		local restriction = self:GetParent():GetRestriction("pickup", class)
+		local restriction = parent:GetRestriction("pickup", class)
 		if restriction then
 			restriction:AddException(class)
 		end
 	else 
-		local restriction = self:GetParent():GetRestriction("swep", class)
+		local restriction = parent:GetRestriction("swep", class)
 		if restriction and not restriction:GetAllow() then
 			return 
 		end
 	end
 
-	local had_weapon = self:GetParent():HasWeapon(class)
+	local had_weapon = parent:HasWeapon(class)
 	
 	if not list.Get("Weapon")[class] then return end
 	if not had_weapon then 
-		self:GetParent():Give(class)
+		parent:Give(class)
 	else
 		return
 	end
 	
-	local swep = self:GetParent():GetWeapon(class)
+	local swep = parent:GetWeapon(class)
 	if not IsValid(swep) then return end
 	
 	swep.SpawnedByWUMA = true
 	
 	local primary_ammo = weapon:GetPrimaryAmmo()
-	if (primary_ammo < 0) then primary_ammo = swep:GetMaxClip1() * 4 end
-	if (primary_ammo < 0) then primary_ammo = 3 end
+	if (primary_ammo < 0) then primary_ammo = swep:GetMaxClip1() * 8 end
+	if (primary_ammo < 0) then primary_ammo = 30 end
 	
 	local secondary_ammo = weapon:GetSecondaryAmmo()
-	if (secondary_ammo < 0) then secondary_ammo = swep:GetMaxClip2() * 4 end
-	if (secondary_ammo < 0) then secondary_ammo = 3 end
+	if (secondary_ammo < 0) then secondary_ammo = swep:GetMaxClip2() * 8 end
+	if (secondary_ammo < 0) then secondary_ammo = 30 end
 	
 	swep:SetClip1(0)
 	swep:SetClip2(0)
 		
 	if (swep:GetMaxClip1() <= 0) then
-		self:GetParent():SetAmmo(primary_ammo, swep:GetPrimaryAmmoType())
+		parent:SetAmmo(primary_ammo, swep:GetPrimaryAmmoType())
 	elseif (swep:GetMaxClip1() > primary_ammo) then
 		swep:SetClip1(primary_ammo)
-		self:GetParent():SetAmmo(0, swep:GetPrimaryAmmoType())
+		parent:SetAmmo(0, swep:GetPrimaryAmmoType())
 	else
-		self:GetParent():SetAmmo(primary_ammo-swep:GetMaxClip1(), swep:GetPrimaryAmmoType())
+		parent:SetAmmo(primary_ammo-swep:GetMaxClip1(), swep:GetPrimaryAmmoType())
 		swep:SetClip1(swep:GetMaxClip1())
 	end
 	
 	if (swep:GetMaxClip2() <= 0) then
-		self:GetParent():SetAmmo(secondary_ammo, swep:GetSecondaryAmmoType())
+		parent:SetAmmo(secondary_ammo, swep:GetSecondaryAmmoType())
 	elseif (swep:GetMaxClip2() > secondary_ammo) then
 		swep:SetClip2(secondary_ammo)
-		self:GetParent():SetAmmo(0, swep:GetSecondaryAmmoType())
+		parent:SetAmmo(0, swep:GetSecondaryAmmoType())
 	else
-		self:GetParent():SetAmmo(secondary_ammo-swep:GetMaxClip2(), swep:GetSecondaryAmmoType())
+		parent:SetAmmo(secondary_ammo-swep:GetMaxClip2(), swep:GetSecondaryAmmoType())
 		swep:SetClip2(swep:GetMaxClip2())
 	end
 	
@@ -395,5 +396,4 @@ end
 object.__index = object
 static.__index = static
 
-setmetatable(Loadout, static) 
-
+setmetatable(Loadout, static)

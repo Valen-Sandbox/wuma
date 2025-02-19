@@ -305,15 +305,17 @@ end
 
 function ENT:GiveLoadout()
 	if self:HasLoadout() then
-		self:GetLoadout():Give()
+		local loadout = self:GetLoadout()
 
-		if self:GetLoadout():GetEnforce() then
+		loadout:Give()
+
+		if loadout:GetEnforce() then
 			return true
-		elseif self:GetLoadout():GetAncestor() and self:GetLoadout():GetAncestor():GetEnforce() then
+		elseif loadout:GetAncestor() and loadout:GetAncestor():GetEnforce() then
 			return true
 		else
-			if (self:GetLoadout():GetPrimary()) then
-				self:ConCommand(string.format("cl_defaultweapon %s"), self:GetLoadout():GetPrimary())
+			if loadout:GetPrimary() then
+				self:ConCommand(string.format("cl_defaultweapon %s"), loadout:GetPrimary())
 			end
 		end
 	end
