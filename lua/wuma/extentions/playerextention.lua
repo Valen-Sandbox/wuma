@@ -71,7 +71,7 @@ end
 
 ENT.old_AddCount = ENT.old_AddCount or ENT.AddCount
 function ENT:AddCount(str, ent, id)
-	if (id and self:HasLimit(id)) then
+	if (str and id and self:HasLimit(id)) then
 		self:GetLimit(id):Add(ent, str)
 
 		local steamid = self:SteamID()
