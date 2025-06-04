@@ -7,16 +7,17 @@ PANEL.TabIcon = "icon16/wrench.png"
 function PANEL:Init()
 
 	self.server_settings = vgui.Create("DPanel", self)
+	local textColor = self:GetSkin().Colours.Label.Dark
 
 	self.server_settings.header = vgui.Create("DPanel", self.server_settings)
 	self.server_settings.header.Paint = function(panel, w, h)
-		draw.DrawText("Server settings", "DermaDefaultBold", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT)
+		draw.DrawText("Server settings", "DermaDefaultBold", 0, h/2-7, textColor, TEXT_ALIGN_LEFT)
 		surface.SetDrawColor(Color(159, 163, 167, 255))
 		surface.DrawLine(0, h-1, w, h-1)
 	end
 
 	self.log_level = vgui.Create("DPanel", self.server_settings)
-	self.log_level.Paint = function(panel, w, h) draw.DrawText("Log level", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.log_level.Paint = function(panel, w, h) draw.DrawText("Log level", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.log_level.combobox = vgui.Create("DComboBox", self.log_level)
 	self.log_level.combobox:AddChoice("None", 0)
 	self.log_level.combobox:AddChoice("Normal", 1)
@@ -25,7 +26,7 @@ function PANEL:Init()
 	self.log_level.combobox.OnSelect = function(panel, index, value, data) WUMA.OnSettingsUpdate("log_level", data) end
 
 	self.echo_changes = vgui.Create("DPanel", self.server_settings)
-	self.echo_changes.Paint = function(panel, w, h) draw.DrawText("Echo changes to", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.echo_changes.Paint = function(panel, w, h) draw.DrawText("Echo changes to", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.echo_changes.combobox = vgui.Create("DComboBox", self.echo_changes)
 	self.echo_changes.combobox:AddChoice("Nobody", 0)
 	self.echo_changes.combobox:AddChoice("Access", 1)
@@ -36,18 +37,18 @@ function PANEL:Init()
 
 	self.checkbox_echo_chat = vgui.Create("DCheckBoxLabel", self.server_settings)
 	self.checkbox_echo_chat:SetText("Echo changes to chat")
-	self.checkbox_echo_chat:SetTextColor(Color(0, 0, 0))
+	self.checkbox_echo_chat:SetTextColor(textColor)
 	self.checkbox_echo_chat:SetValue(false)
 	self.checkbox_echo_chat.OnChange = function(panel, bool) WUMA.OnSettingsUpdate("echo_to_chat", bool) end
 
 	self.checkbox_exclude_limits = vgui.Create("DCheckBoxLabel", self.server_settings)
 	self.checkbox_exclude_limits:SetText("Exclude limits from gamemode limits")
-	self.checkbox_exclude_limits:SetTextColor(Color(0, 0, 0))
+	self.checkbox_exclude_limits:SetTextColor(textColor)
 	self.checkbox_exclude_limits:SetValue(false)
 	self.checkbox_exclude_limits.OnChange = function(panel, bool) WUMA.OnSettingsUpdate("exclude_limits", bool) end
 
 	self.chat_command = vgui.Create("DPanel", self.server_settings)
-	self.chat_command.Paint = function(panel, w, h) draw.DrawText("Loadout chat command", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.chat_command.Paint = function(panel, w, h) draw.DrawText("Loadout chat command", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.chat_command.textbox = vgui.Create("DTextEntry", self.chat_command)
 	local old_setvalue = self.chat_command.textbox.SetValue
 	self.chat_command.textbox.SetValue = function(panel, value)
@@ -70,13 +71,13 @@ function PANEL:Init()
 
 	self.adv_settings.header = vgui.Create("DPanel", self.adv_settings)
 	self.adv_settings.header.Paint = function(panel, w, h)
-		draw.DrawText("Advanced server settings", "DermaDefaultBold", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT)
+		draw.DrawText("Advanced server settings", "DermaDefaultBold", 0, h/2-7, textColor, TEXT_ALIGN_LEFT)
 		surface.SetDrawColor(Color(159, 163, 167, 255))
 		surface.DrawLine(0, h-1, w, h-1)
 	end
 
 	self.net_send_interval = vgui.Create("DPanel", self.adv_settings)
-	self.net_send_interval.Paint = function(panel, w, h) draw.DrawText("Net send interval", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.net_send_interval.Paint = function(panel, w, h) draw.DrawText("Net send interval", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.net_send_interval.wang = vgui.Create("DNumberWang", self.net_send_interval)
 	self.net_send_interval.wang.Up:SetVisible(false)
 	self.net_send_interval.wang.Down:SetVisible(false)
@@ -85,7 +86,7 @@ function PANEL:Init()
 	self.net_send_interval.wang.OnChange = function(panel) WUMA.OnSettingsUpdate("net_send_interval", panel:GetValue()) end
 
 	self.net_send_size = vgui.Create("DPanel", self.adv_settings)
-	self.net_send_size.Paint = function(panel, w, h) draw.DrawText("Net send size", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.net_send_size.Paint = function(panel, w, h) draw.DrawText("Net send size", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.net_send_size.wang = vgui.Create("DNumberWang", self.net_send_size)
 	self.net_send_size.wang.Up:SetVisible(false)
 	self.net_send_size.wang.Down:SetVisible(false)
@@ -115,7 +116,7 @@ function PANEL:Init()
 	end
 
 	self.data_save_delay = vgui.Create("DPanel", self.adv_settings)
-	self.data_save_delay.Paint = function(panel, w, h) draw.DrawText("Data save delay", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.data_save_delay.Paint = function(panel, w, h) draw.DrawText("Data save delay", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.data_save_delay.wang = vgui.Create("DNumberWang", self.data_save_delay)
 	self.data_save_delay.wang.Up:SetVisible(false)
 	self.data_save_delay.wang.Down:SetVisible(false)
@@ -127,21 +128,21 @@ function PANEL:Init()
 
 	self.client_settings.header = vgui.Create("DPanel", self.client_settings)
 	self.client_settings.header.Paint = function(panel, w, h)
-		draw.DrawText("Client settings", "DermaDefaultBold", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT)
+		draw.DrawText("Client settings", "DermaDefaultBold", 0, h/2-7, textColor, TEXT_ALIGN_LEFT)
 		surface.SetDrawColor(Color(159, 163, 167, 255))
 		surface.DrawLine(0, h-1, w, h-1)
 	end
 
 	self.checkbox_request = vgui.Create("DCheckBoxLabel", self.client_settings)
 	self.checkbox_request:SetText("Request all data on join")
-	self.checkbox_request:SetTextColor(Color(0, 0, 0))
+	self.checkbox_request:SetTextColor(textColor)
 	self.checkbox_request:SetValue(false)
 	self.checkbox_request.OnChange = function(panel, bool) GetConVar("wuma_request_on_join"):SetBool(bool) end
 	self.checkbox_request:SetValue(GetConVar("wuma_request_on_join"):GetBool())
 
 	self.autounsubscribe = vgui.Create("DPanel", self.client_settings)
 	self.autounsubscribe.Paint = function(panel, w, h)
-		draw.DrawText("Auto-unsubscribe to data", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT)
+		draw.DrawText("Auto-unsubscribe to data", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT)
 	end
 	self.autounsubscribe.combobox = vgui.Create("DComboBox", self.autounsubscribe)
 	self.autounsubscribe.combobox:AddChoice("Never", -1)
@@ -156,7 +157,7 @@ function PANEL:Init()
 	self:SelectChoiceByData(self.autounsubscribe.combobox, GetConVar("wuma_autounsubscribe"):GetInt())
 
 	self.autounsubscribe_user = vgui.Create("DPanel", self.client_settings)
-	self.autounsubscribe_user.Paint = function(panel, w, h) draw.DrawText("Auto-unsubscribe to user data", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.autounsubscribe_user.Paint = function(panel, w, h) draw.DrawText("Auto-unsubscribe to user data", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.autounsubscribe_user.combobox = vgui.Create("DComboBox", self.autounsubscribe_user)
 	self.autounsubscribe_user.combobox:AddChoice("Never", -1)
 	self.autounsubscribe_user.combobox:AddChoice("1 hour", 60*60)
@@ -187,19 +188,19 @@ function PANEL:Init()
 
 	self.inheritance_settings.header = vgui.Create("DPanel", self.inheritance_settings)
 	self.inheritance_settings.header.Paint = function(panel, w, h)
-		draw.DrawText("Inheritance settings", "DermaDefaultBold", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT)
+		draw.DrawText("Inheritance settings", "DermaDefaultBold", 0, h/2-7, textColor, TEXT_ALIGN_LEFT)
 		surface.SetDrawColor(Color(159, 163, 167, 255))
 		surface.DrawLine(0, h-1, w, h-1)
 	end
 
 	--Inheritance target
 	self.inheritance_target = vgui.Create("DPanel", self.inheritance_settings)
-	self.inheritance_target.Paint = function(panel, w, h) draw.DrawText("Select inheritance for", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.inheritance_target.Paint = function(panel, w, h) draw.DrawText("Select inheritance for", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.inheritance_target.combobox = vgui.Create("DComboBox", self.inheritance_target)
 
 	--Restrictions
 	self.inheritance_restriction = vgui.Create("DPanel", self.inheritance_settings)
-	self.inheritance_restriction.Paint = function(panel, w, h) draw.DrawText("Inherit restrictions from ", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.inheritance_restriction.Paint = function(panel, w, h) draw.DrawText("Inherit restrictions from ", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.inheritance_restriction.combobox = vgui.Create("DComboBox", self.inheritance_restriction)
 	self.inheritance_restriction.combobox.OnSelect = function()
 		local target = self.inheritance_target.combobox:GetSelected()
@@ -210,7 +211,7 @@ function PANEL:Init()
 
 	--Limits
 	self.inheritance_limit = vgui.Create("DPanel", self.inheritance_settings)
-	self.inheritance_limit.Paint = function(panel, w, h) draw.DrawText("Inherit limits from ", "DermaDefault", 0, h/2-7, Color(0, 0, 0), TEXT_ALIGN_LEFT) end
+	self.inheritance_limit.Paint = function(panel, w, h) draw.DrawText("Inherit limits from ", "DermaDefault", 0, h/2-7, textColor, TEXT_ALIGN_LEFT) end
 	self.inheritance_limit.combobox = vgui.Create("DComboBox", self.inheritance_limit)
 	self.inheritance_limit.combobox.OnSelect = function()
 		local target = self.inheritance_target.combobox:GetSelected()

@@ -209,7 +209,7 @@ function PANEL:Init()
 	--User label
 	self.label_user = vgui.Create("DLabel", self)
 	self.label_user:SetText("NO_USER")
-	self.label_user:SetTextColor(Color(0, 0, 0))
+	self.label_user:SetTextColor(self:GetSkin().Colours.Label.Dark)
 	self.label_user:SetVisible(true)
 
 	local highlight = function(line, data, datav)

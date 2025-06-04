@@ -122,7 +122,7 @@ function PANEL:Init()
 	--Allow checkbox
 	self.checkbox_exclusive = vgui.Create("DCheckBoxLabel", self)
 	self.checkbox_exclusive:SetText("Exclusive limit")
-	self.checkbox_exclusive:SetTextColor(Color(0, 0, 0))
+	self.checkbox_exclusive:SetTextColor(self:GetSkin().Colours.Label.Dark)
 	self.checkbox_exclusive:SetValue(false)
 	self.checkbox_exclusive:SetVisible(false)
 

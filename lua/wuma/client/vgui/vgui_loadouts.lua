@@ -128,17 +128,19 @@ function PANEL:Init()
 	self.map_chooser = vgui.Create("WMapPicker", self)
 	self.map_chooser:SetVisible(false)
 
+	local textColor = self:GetSkin().Colours.Label.Dark
+
 	--Allow checkbox
 	self.checkbox_ignore = vgui.Create("DCheckBoxLabel", self)
 	self.checkbox_ignore:SetText("Ignore Restrictions")
-	self.checkbox_ignore:SetTextColor(Color(0, 0, 0))
+	self.checkbox_ignore:SetTextColor(textColor)
 	self.checkbox_ignore:SetValue(true)
 	self.checkbox_ignore:SetVisible(false)
 
 	--Enforce checkbox
 	self.checkbox_enforce = vgui.Create("DCheckBoxLabel", self)
-	self.checkbox_enforce:SetText("Enforce loadout")
-	self.checkbox_enforce:SetTextColor(Color(0, 0, 0))
+	self.checkbox_enforce:SetText("Enforce Loadout")
+	self.checkbox_enforce:SetTextColor(textColor)
 	self.checkbox_enforce:SetValue(true)
 	self.checkbox_enforce:SetEnabled(false)
 	self.checkbox_enforce:SetVisible(false)

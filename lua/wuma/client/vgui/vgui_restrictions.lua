@@ -107,17 +107,19 @@ function PANEL:Init()
 	self.map_chooser = vgui.Create("WMapPicker", self)
 	self.map_chooser:SetVisible(false)
 
+	local textColor = self:GetSkin().Colours.Label.Dark
+
 	--Allow checkbox
 	self.checkbox_allow = vgui.Create("DCheckBoxLabel", self)
 	self.checkbox_allow:SetText("Anti-Restriction")
-	self.checkbox_allow:SetTextColor(Color(0, 0, 0))
+	self.checkbox_allow:SetTextColor(textColor)
 	self.checkbox_allow:SetValue(false)
 	self.checkbox_allow:SetVisible(false)
 
 	--All checkbox
 	self.checkbox_all = vgui.Create("DCheckBoxLabel", self)
 	self.checkbox_all:SetText("Restrict type")
-	self.checkbox_all:SetTextColor(Color(0, 0, 0))
+	self.checkbox_all:SetTextColor(textColor)
 	self.checkbox_all:SetValue(false)
 	self.checkbox_all:SetVisible(false)
 	self.checkbox_all.OnChange = self.OnRestrictAllCheckboxChanged

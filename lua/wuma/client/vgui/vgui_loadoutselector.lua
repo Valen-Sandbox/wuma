@@ -17,7 +17,7 @@ function PANEL:Init()
 	--HelpText Label
 	self.helptext_label = vgui.Create("DLabel", self)
 	self.helptext_label:SetText(self.HelpText)
-	self.helptext_label:SetTextColor(Color(0, 0, 0))
+	self.helptext_label:SetTextColor(self:GetSkin().Colours.Label.Dark)
 	self.helptext_label:SetAutoStretchVertical(true)
 
 	--Search bar

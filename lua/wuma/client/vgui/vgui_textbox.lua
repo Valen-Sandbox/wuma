@@ -43,7 +43,7 @@ function PANEL:OnTextChanged()
 	end
 
 	self:OnChange()
-	
+
 end
 
 function PANEL:RefreshDefault()
@@ -64,39 +64,38 @@ function PANEL:OnLoseFocus()
 			self:SetTextColor(self.default_color)
 		end
 	end
-	
+
 	if self:GetNumeric() and (self:GetValue() ~= "") and (self:GetValue() ~= self:GetDefault()) then
 		if self:GetMinNumeric() then
 			if (tonumber(self:GetValue()) < self:GetMinNumeric()) then self:SetText(self:GetMinNumeric()) end
 		end
-		
+
 		if self:GetMaxNumeric() then
 			if (tonumber(self:GetValue()) > self:GetMaxNumeric()) then self:SetText(self:GetMaxNumeric()) end
 		end
 	end
-	
+
 	self:UpdateConvarValue()
 	hook.Call("OnTextEntryLoseFocus", nil, self)
 	self:FocusLost()
-	
+
 end
 
 function PANEL:FocusLost()
-
 end
 
 function PANEL:OnGetFocus()
 	if self:GetDefault() then
 		local text = self:GetValue()
+		self:SetTextColor(self:GetSkin().Colours.Label.Dark)
+
 		if (text == self:GetDefault()) then
 			self:SetText("")
-			self:SetTextColor(Color(0, 0, 0))
 		else
-			self:SetTextColor(Color(0, 0, 0))
 			self:SelectAll()
 		end
 	end
-	
+
 	hook.Run("OnTextEntryGetFocus", self)
 end
 
