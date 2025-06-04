@@ -10,7 +10,7 @@ function WUMA.Log.ServerLog(msg, ...)
 	if args then
 		msg = WUMA.SafeFormat(msg, args)
 	end
-	msg = "[WUMA] " .. msg 
+	msg = "[WUMA] " .. msg
 	if game.IsDedicated() then
 		Msg(msg.."\n")
 	else
@@ -32,15 +32,15 @@ WUMAChatPrint = WUMA.Log.ChatPrint --To save my fingers
 
 function WUMA.Log.DebugLog(msg, ...)
 	if (log_level:GetInt() ~= 2 and SERVER) then return end
-	if (istable(msg)) then 
-		PrintTable(msg) 
+	if (istable(msg)) then
+		PrintTable(msg)
 		return false
 	end
 	local args = { ... }
 	if args then
 		msg = WUMA.SafeFormat(msg, args)
 	end
-	msg = "[WUMA] " .. msg 
+	msg = "[WUMA] " .. msg
 	if game.IsDedicated() then
 		Msg(msg.."\n")
 	else

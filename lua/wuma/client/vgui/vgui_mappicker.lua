@@ -11,7 +11,7 @@ function PANEL:AddOptions(options)
 		end
 	end
 end
-	
+
 function PANEL:GetArgument()
 	local text, data = self:GetSelected()
 

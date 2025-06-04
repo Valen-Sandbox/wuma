@@ -65,21 +65,21 @@ function WUMA.Cache(id, data)
 			head = {id = id, data = data, next = nil}
 			tail = head
 			cacheCounter = cacheCounter + 1
-		else 
+		else
 			local link = {id = id, data = data, next = head}
 			head = link
 			cacheCounter = cacheCounter + 1
 		end
-		
+
 		if (cacheCounter >= cacheSize) then
 			local counter = 0
 			local l = head
 			while l do
 				if (counter > cacheSize - 2) then
-					l.next = nil	
+					l.next = nil
 					l = nil
 					cacheCounter = counter
-				else 
+				else
 					l = l.next
 					counter = counter + 1
 				end
@@ -97,14 +97,14 @@ function WUMA.Cache(id, data)
 				end
 				return link.data --Return the data
 			end
-			
+
 			previous = link --Set previous to current link
 			link = link.next --Set current link to next link
 		end
 	end
 end
 
-function WUMA.InvalidateCache(id) 
+function WUMA.InvalidateCache(id)
 	if not head then return end
 	local link = head
 	local previous
@@ -112,7 +112,7 @@ function WUMA.InvalidateCache(id)
 		if (link.id == id) then
 			if (previous) then
 				previous.next = link.next
-			else 
+			else
 				head = head.next
 			end
 			cacheCounter = cacheCounter - 1

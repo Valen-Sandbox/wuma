@@ -7,17 +7,17 @@ static._id = "UserObject"
 
 function object:Construct(tbl)
 	self:SetParent(tbl.parent)
-	
+
 	if tbl.scope then self:SetScope(tbl.scope) else self.m.scope = "Permanent" end
 end
 
-function object:SetScope(scope)	
+function object:SetScope(scope)
 	if not self:GetOrigin() then
 		self.scope = scope
 		if not scope.m then self.scope = Scope:new(scope) end
-	
+
 		self.scope:SetParent(self)
-		
+
 		self.scope:AllowThink()
 	end
 end
@@ -43,7 +43,7 @@ function object:Enable()
 	self.m.disabled = false
 end
 
-function object:IsDisabled() 
+function object:IsDisabled()
 	if self.m and self.m.disabled then return true end
 	return false
 end

@@ -23,7 +23,7 @@ function WUMA.SQL.Query(str, ...)
 	for k, v in pairs(args) do
 		args[k] = sql.SQLStr(v, isstring(v))
 	end
-	
+
 	local tbl = sql.Query(string.format(str, unpack(args)))
 	return tbl
 end

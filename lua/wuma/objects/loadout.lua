@@ -10,11 +10,11 @@ function Loadout:new(tbl)
 	tbl = tbl or {}
 	local mt = table.Copy(object)
 	mt.m = {}
-	
+
 	local obj = setmetatable({}, mt)
-	
+
 	obj.m._uniqueid = WUMA.GenerateUniqueID()
-	
+
 	obj.usergroup = tbl.usergroup or nil
 	obj.primary = tbl.primary or nil
 	obj.supplement = tbl.supplement or nil
@@ -22,7 +22,7 @@ function Loadout:new(tbl)
 	obj.parent = tbl.parent or nil
 	if isstring(obj.parent) then obj.parentid = obj.parent elseif obj.parent then obj.parentid = obj.parent:SteamID() end
 	obj.weapons = {}
-	
+
 	if tbl.weapons then
 		for class, wep in pairs(tbl.weapons) do
 			if istable(wep) then
@@ -31,15 +31,15 @@ function Loadout:new(tbl)
 			end
 		end
 	end
-	
+
 	obj.m._id = Loadout._id
-	
+
 	obj.m.origin = tbl.origin or nil
 	obj.m.ancestor = tbl.ancestor or nil
 	obj.m.child = tbl.child or nil
 
 	return obj
-end 
+end
 
 function static:GetID()
 	return Loadout._id
@@ -64,7 +64,7 @@ function object:Clone()
 		origin = self
 	end
 	copy.origin = origin
-	
+
 	local obj = Loadout:new(copy)
 
 	return obj
@@ -105,78 +105,78 @@ function object:Give(weapon)
 	if self:GetChild() and self:GetChild():GetEnforce() then
 		return
 	end
-	
+
 	if weapon then
 		self:GiveWeapon(weapon)
-		return 
+		return
 	end
-	
+
 	if self:GetEnforce() then
 		self:GetParent():StripWeapons()
 		self:GetParent():StripAmmo()
 	elseif self:GetAncestor() then
 		self:GetAncestor():Give()
 	end
-	
+
 	for class, _ in pairs(self:GetWeapons()) do
 		self:GiveWeapon(class)
 	end
-	
+
 	if self:GetPrimary() then
 		self:GetParent():SelectWeapon(self:GetPrimary())
 	end
-	
+
 end
 
 function object:GiveWeapon(class)
 
-	if not self:HasWeapon(class) then 
+	if not self:HasWeapon(class) then
 		if self:GetAncestor() then return self:GetAncestor():GiveWeapon(class) end
 	end
-	
+
 	local parent = self:GetParent()
 	if not parent then return end
-	
+
 	local weapon = self:GetWeapon(class)
-	
+
 	if weapon:IsDisabled() then return end
 	if not weapon:DoesRespectRestriction() then
 		local restriction = parent:GetRestriction("pickup", class)
 		if restriction then
 			restriction:AddException(class)
 		end
-	else 
+	else
 		local restriction = parent:GetRestriction("swep", class)
 		if restriction and not restriction:GetAllow() then
-			return 
+			return
 		end
 	end
 
 	local had_weapon = parent:HasWeapon(class)
-	
+
 	if not list.Get("Weapon")[class] then return end
-	if not had_weapon then 
+	if not had_weapon then
 		parent:Give(class)
 	else
 		return
 	end
-	
+
 	local swep = parent:GetWeapon(class)
 	if not IsValid(swep) then return end
-	
+
 	swep.SpawnedByWUMA = true
-	
+
 	local primary_ammo = weapon:GetPrimaryAmmo()
 	if (primary_ammo < 0) then primary_ammo = swep:GetMaxClip1() * 8 end
 	if (primary_ammo < 0) then primary_ammo = 30 end
-	
+
 	local secondary_ammo = weapon:GetSecondaryAmmo()
 	if (secondary_ammo < 0) then secondary_ammo = swep:GetMaxClip2() * 8 end
 	if (secondary_ammo < 0) then secondary_ammo = 30 end
-	
+
 	swep:SetClip1(0)
 	swep:SetClip2(0)
-		
+
 	if (swep:GetMaxClip1() <= 0) then
 		parent:SetAmmo(primary_ammo, swep:GetPrimaryAmmoType())
 	elseif (swep:GetMaxClip1() > primary_ammo) then
@@ -186,7 +186,7 @@ function object:GiveWeapon(class)
 		parent:SetAmmo(primary_ammo-swep:GetMaxClip1(), swep:GetPrimaryAmmoType())
 		swep:SetClip1(swep:GetMaxClip1())
 	end
-	
+
 	if (swep:GetMaxClip2() <= 0) then
 		parent:SetAmmo(secondary_ammo, swep:GetSecondaryAmmoType())
 	elseif (swep:GetMaxClip2() > secondary_ammo) then
@@ -196,16 +196,16 @@ function object:GiveWeapon(class)
 		parent:SetAmmo(secondary_ammo-swep:GetMaxClip2(), swep:GetSecondaryAmmoType())
 		swep:SetClip2(swep:GetMaxClip2())
 	end
-	
+
 end
 
 function object:TakeWeapon(class)
 	if not self:GetParent() then return end
-	
+
 	local swep = self:GetParent():GetWeapon(class)
 	if not IsValid(swep) then return end
 	if not self:HasWeapon(class) then return end
-	
+
 	if self:GetAncestor() and not self:GetEnforce() and self:GetAncestor():GetWeapons()[class] then return end
 	if self:GetChild() and self:GetChild():GetWeapons()[class] then return end
 	if not swep.SpawnedByWUMA then return end
@@ -220,7 +220,7 @@ function object:TakeWeapon(class)
 			end
 		end
 	end
-	
+
 	self:GetParent():StripWeapon(class)
 end
 
@@ -230,7 +230,7 @@ function object:HasWeapon(weapon)
 	if self:GetAncestor() and self:GetAncestor():GetWeapon(weapon) then return true end
 end
 
-function object:IsDisabled() 
+function object:IsDisabled()
 	for class, weapon in pairs(self:GetWeapons()) do
 		if not weapon:IsDisabled() then
 			return false
@@ -254,27 +254,27 @@ end
 
 function object:AddWeapon(weapon, primary, secondary, respect, scope)
 	weapon = Loadout_Weapon:new{class=self:ParseWeapon(weapon), primary=primary, secondary=secondary, respect_restrictions=respect, scope=scope, parent=self}
-	
+
 	self:SetWeapon(weapon:GetClass(), weapon)
-	
-	if self:GetParent() and isentity(self:GetParent()) then 
+
+	if self:GetParent() and isentity(self:GetParent()) then
 		self:Give(weapon:GetClass())
 	end
 end
 
 function object:RemoveWeapon(weapon)
 	weapon = self:ParseWeapon(weapon)
-	
+
 	if (self:GetPrimary() == weapon) then self:SetPrimary(nil) end
-	
+
 	if (self:GetParent() and isentity(self:GetParent())) then
 		if (self:HasWeapon(weapon)) then
 			self:TakeWeapon(weapon)
 		end
 	end
-	
+
 	self:SetWeapon(weapon, nil)
-end 
+end
 
 function object:GetWeaponCount()
 	return table.Count(self:GetWeapons())
@@ -343,11 +343,11 @@ end
 
 function object:SetAncestor(ancestor)
 	if not ancestor or not ancestor._id or ancestor._id ~= self._id then WUMAError("Tried to set a non-loadout object as child."); return end
-	
+
 	if (ancestor:GetAncestor()) then
 		ancestor.ancestor = nil
 	end
-	
+
 	ancestor:SetParent(self:GetParent())
 	ancestor.child = self
 	self.ancestor = ancestor
@@ -355,12 +355,12 @@ end
 
 function object:PurgeAncestor()
 	if not self:GetAncestor() then return end
-	
+
 	local weapons = self:GetAncestor():GetWeapons()
-	
+
 	self.ancestor.child = nil
 	self.ancestor = nil
-	
+
 	for weapon, _ in pairs (weapons) do
 		if not self:GetWeapon(weapon) then
 			self:TakeWeapon(weapon)
@@ -374,7 +374,7 @@ end
 
 function object:SetChild(child)
 	if not ancestor or not ancestor._id or ancestor._id ~= self._id then WUMAError("Tried to set a non-loadout object as child."); return end
-	
+
 	child.ancestor = self
 	self.child = child
 end

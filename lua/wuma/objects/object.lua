@@ -22,13 +22,13 @@ end
 function static:Inherit(static, object)
 	static._object = object
 	object._static = static
-	
+
 	local getmeta = getmetatable --We use this like, alot
 	local setmeta = setmetatable --We use this like, alot
-	
+
 	setmeta(static, getmeta(self))
 	local tbl = setmeta({}, static)
-	
+
 	getmeta(tbl).__index = index
 
 	local metatableStack = {}
@@ -42,41 +42,41 @@ function static:Inherit(static, object)
 				metamethodStack[k] = v
 			end
 		end
-		
+
 		metatable = getmeta(metatable)
 	end
 
 	local count = table.Count
 	getmeta(tbl).new = function(_, tbl)
 		local object = setmeta({}, {m = {}})
-		
+
 		local metatable = getmeta(object)
 		for i = 1, count(metatableStack) do
 			setmeta(metatable, metatableStack[i])
-			
+
 			metatable = getmeta(metatable)
 		end
-		
+
 		local metatable = getmeta(object)
 		for k, v in pairs(metamethodStack) do
 			metatable[k] = v
 		end
 
-		metatable.__index = index 
-		
-		metatable.super = setmeta({}, {__index = function(_, key) 
-			return function(_, ...) 
-				getmeta(getmeta(metatable))[key](object, ...) 
-			end 
+		metatable.__index = index
+
+		metatable.super = setmeta({}, {__index = function(_, key)
+			return function(_, ...)
+				getmeta(getmeta(metatable))[key](object, ...)
+			end
 		end})
-		
+
 		object.m._uniqueid = generateUniqueId()
-		
+
 		object:Construct(tbl or {})
 		return object
 	end
 	getmeta(tbl).New = getmeta(tbl).new
-	
+
 	return tbl
 end
 
@@ -85,7 +85,7 @@ function static:GetID()
 end
 
 function object:Construct(tbl)
-	
+
 end
 
 function object:GetStatic()
@@ -122,7 +122,7 @@ function object:GetOrigin()
 	return self.m.origin
 end
 
-static.__index = static 
+static.__index = static
 static._object = object
 
 WUMAObject = setmetatable({}, static)

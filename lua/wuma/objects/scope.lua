@@ -1,4 +1,4 @@
- 
+
 Scope = {}
 Scope.types = {}
 
@@ -11,16 +11,16 @@ Scope.UNTIL = {
 	log_prefix="until",
 	parts={"date_chooser"},
 	save=true,
-	checkfunction=function(obj) 
+	checkfunction=function(obj)
 		local tbl = obj:GetData()
-		if (tonumber(os.date("%Y", os.time())) > tbl.year) then 
-			return false 
-		elseif (tonumber(os.date("%Y", os.time())) == tbl.year) then	
-			if (tonumber(os.date("%m", os.time())) > tbl.month) then 
-				return false 
+		if (tonumber(os.date("%Y", os.time())) > tbl.year) then
+			return false
+		elseif (tonumber(os.date("%Y", os.time())) == tbl.year) then
+			if (tonumber(os.date("%m", os.time())) > tbl.month) then
+				return false
 			elseif (tonumber(os.date("%m", os.time())) == tbl.month) then
-				if (tonumber(os.date("%d", os.time())) > tbl.day) then 
-					return false 
+				if (tonumber(os.date("%d", os.time())) > tbl.day) then
+					return false
 				elseif (tonumber(os.date("%d", os.time())) == tbl.day) then
 					return false
 				else
@@ -33,7 +33,7 @@ Scope.UNTIL = {
 			return true
 		end
 	end,
-	arguments={WUMAAccess.NUMBER} 
+	arguments={WUMAAccess.NUMBER}
 }
 Scope.types.UNTIL = Scope.UNTIL
 
@@ -52,7 +52,7 @@ Scope.DURATION = {
 			{60, "minutes"},
 			{1, "seconds"}
 		}
-		
+
 		for k, v in pairs(form) do
 			local dur = v[1]
 			if (time >= dur) then
@@ -69,7 +69,7 @@ Scope.DURATION = {
 	save=true,
 	processdata=function(data) return tonumber(data)+os.time() end,
 	checkdata=os.time,
-	checkfunction=function(obj) 
+	checkfunction=function(obj)
 		return (os.time() <= obj:GetData())
 	end,
 	arguments={WUMAAccess.NUMBER}
@@ -84,13 +84,13 @@ Scope.MAP = {
 	save=true,
 	keep=true,
 	checkdata=game.GetMap,
-	checkfunction = function(obj, data) 
+	checkfunction = function(obj, data)
 		return (data == obj:GetData())
 	end,
-	arguments={WUMAAccess.STRING}, 
+	arguments={WUMAAccess.STRING},
 }
 Scope.types.MAP = Scope.MAP
- 
+
 Scope._id = "WUMA_Scope"
 Scope.Objects = Scope.Objects or {}
 
@@ -98,23 +98,23 @@ function Scope:new(tbl)
 	tbl = tbl or {}
 	local mt = table.Copy(object)
 	mt.m = {}
-	
+
 	local obj = setmetatable({}, mt)
-	
+
 	obj.m._uniqueid = WUMA.GenerateUniqueID()
-	
+
 	obj.type = tbl.type or "Permanent"
 	obj.data = tbl.data or false
 	obj.class = tbl.class or false
-	
+
 	obj.m.parent = tbl.parent or false
-	
+
 	if (obj:GetType() ~= "MAP") then
 		hook.Add("WUMAScopeThink", "WUMAScopeThink_"..tostring(obj:GetUniqueID()), function() obj:Think() end)
 	end
- 
+
 	return obj
-end 
+end
 
 function static:StartThink()
 	if not timer.Exists("WUMAScopeStaticThinkTimer") then
@@ -124,17 +124,17 @@ end
 
 function static:GetTypes(field)
 	if field then
-	
+
 		local tbl = {}
-		
-		for _, type in pairs(Scope.types) do 
-			for key, value in pairs(type) do 
+
+		for _, type in pairs(Scope.types) do
+			for key, value in pairs(type) do
 				if (key == field) then
 					table.insert(tbl, value)
 				end
 			end
 		end
-		 
+
 		return tbl
 	end
 
@@ -157,7 +157,7 @@ end
 
 function object:__tostring()
 	local scope = Scope.types[self:GetType()]
-	if scope.print2 then 
+	if scope.print2 then
 		return scope.print2(self)
 	else
 		return scope.print
@@ -174,7 +174,7 @@ end
 
 function object:Delete()
 	hook.Remove("WUMAScopeThink", "WUMAScopeThink_"..tostring(self:GetUniqueID()))
-end	
+end
 
 function object:Shred()
 	hook.Remove("WUMAScopeThink", "WUMAScopeThink_"..tostring(self:GetUniqueID()))
@@ -254,7 +254,7 @@ end
 
 function object:GetPrint2()
 	local scope = Scope.types[self:GetType()]
-	if scope.print2 then 
+	if scope.print2 then
 		return scope.print2(self)
 	else
 		return scope.print
@@ -287,6 +287,6 @@ function object:GetOrigin()
 end
 
 object.__index = object
-static.__index = static 
+static.__index = static
 
 setmetatable(Scope, static)

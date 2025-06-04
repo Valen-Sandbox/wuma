@@ -1,7 +1,7 @@
 
 WUMAAccess = {}
 
-WUMAAccess.PLAYER = function(str) 
+WUMAAccess.PLAYER = function(str)
 	if isentity(str) then return str end
 
 	for _, ply in pairs(player.GetAll()) do
@@ -9,18 +9,18 @@ WUMAAccess.PLAYER = function(str)
 			return ply
 		end
 	end
-	
+
 	if (WUMA.IsSteamID(str)) then return str end
 	return false
 end
 
-WUMAAccess.STRING = function(str) 
+WUMAAccess.STRING = function(str)
 	return str
 end
 
 WUMAAccess.USERGROUP = WUMAAccess.STRING
 
-WUMAAccess.NUMBER = function(str) 
+WUMAAccess.NUMBER = function(str)
 	if isnumber(str) then return str end
 
 	local num = tonumber(str)
@@ -28,15 +28,15 @@ WUMAAccess.NUMBER = function(str)
 	return num
 end
 
-WUMAAccess.SCOPE = function(str) 
+WUMAAccess.SCOPE = function(str)
 	if istable(str) then return Scope:new(tbl) end
-	
+
 	local tbl = util.JSONToTable(str)
 
 	if not tbl or not tbl.type then return false end
 
 	local scope = Scope:new{type=tbl.type, data=tbl.data}
-	
+
 	return scope
 end
 
@@ -50,9 +50,9 @@ function WUMAAccess:new(tbl)
 	tbl = tbl or {}
 	local mt = table.Copy(object)
 	mt.m = {}
-	
+
 	local obj = setmetatable({}, mt)
-	
+
 	obj.func = tbl.func or false
 	obj.cmd = tbl.name or false
 	obj.arguments = tbl.arguments or {}
@@ -64,10 +64,10 @@ function WUMAAccess:new(tbl)
 	obj.log_function = tbl.log_function or false
 
 	obj.m._uniqueid = WUMA.GenerateUniqueID()
-	
+
 	return obj
-end 
- 
+end
+
 function static:GetID()
 	return WUMAAccess._id
 end
@@ -75,7 +75,7 @@ end
 function object:__tostring()
 	return string.format("WUMAAccess [%s]", self:GetName())
 end
- 
+
 function object:__call(...)
 	local tbl = {...}
 	self:GetAccessFunction()(self, tbl[1], function(allow)
@@ -90,7 +90,7 @@ end
 
 function object:Clone()
 	local obj = WUMAAccess:new(table.Copy(self))
-	
+
 	return obj
 end
 
@@ -112,7 +112,7 @@ end
 
 function object:GetAccess(str)
 	return self.access
-end	
+end
 
 function object:SetFunction(func)
 	self.func = func
@@ -173,4 +173,4 @@ end
 object.__index = object
 static.__index = static
 
-setmetatable(WUMAAccess, static) 
+setmetatable(WUMAAccess, static)

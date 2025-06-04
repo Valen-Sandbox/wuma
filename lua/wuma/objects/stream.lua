@@ -11,9 +11,9 @@ function WUMAStream:new(tbl)
 	tbl = tbl or {}
 	local mt = table.Copy(object)
 	mt.m = {}
-	
+
 	local obj = setmetatable({}, mt)
-	
+
 	obj.m._uniqueid = WUMA.GenerateUniqueID()
 
 	obj.name = tbl.name or false
@@ -22,16 +22,16 @@ function WUMAStream:new(tbl)
 	obj.client = tbl.client or false
 	obj.auth = tbl.auth or false
 	obj.id = tbl.id or false
-	
+
 	obj._id = WUMAStream._id
-	
+
 	return obj
-end 
+end
 
 function object:__tostring()
 	return self.name
 end
- 
+
 function object:__call(...)
 	if SERVER then
 		return self.server({...})
@@ -63,7 +63,7 @@ function object:Send(user, data)
 end
 
 function object:IsAuthorized(user, callback)
-	if not self.auth then 
+	if not self.auth then
 		WUMAError("FATAL SECURITY RISK! A NET_STREAM OBJECT HAS NO AUTHORIZATION FUNCTION!")
 		callback(false)
 	else
@@ -114,4 +114,4 @@ end
 object.__index = object
 static.__index = static
 
-setmetatable(WUMAStream, static) 
+setmetatable(WUMAStream, static)
